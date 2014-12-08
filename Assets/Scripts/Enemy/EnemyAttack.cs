@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerAttack : MonoBehaviour {
+public class EnemyAttack : MonoBehaviour {
 
 	public GameObject target;
 	public float attackTimer;
 	public float coolDown;
-	EnemyHealth enemyHealth;
 
-	 
+	PlayerHealth playHealth;
+
 	void Awake() {
-		enemyHealth = target.GetComponent <EnemyHealth> ();
+		playHealth = target.GetComponent<PlayerHealth>();
 	}
+
 	// Use this for initialization
 	void Start () {
 		attackTimer = 0;
@@ -22,30 +23,27 @@ public class PlayerAttack : MonoBehaviour {
 	void Update () {
 		if (attackTimer > 0)
 			attackTimer -= Time.deltaTime;
-
+		
 		if (attackTimer < 0)
 			attackTimer = 0;
 
-		if (Input.GetKeyUp (KeyCode.F)) {
-			if (attackTimer == 0) {
-				Attack();
-				attackTimer = coolDown;
-			}						
+		if (attackTimer == 0) {
+			Attack();
+			attackTimer = coolDown;
 		}
 	}
-
+	
 	private void Attack() {
 		float distance = Vector3.Distance (target.transform.position, transform.position);
-
+		
 		Vector3 dir = (target.transform.position - transform.position).normalized;
-		Debug.Log ("dir = " + dir);
 		float direction = Vector3.Dot (dir, transform.forward);
-
-		Debug.Log ("direction = " + direction);
+		
+		Debug.Log ("ememy attack");
 		// direction > 0, in front of player
 		if (distance < 2.5f && direction > 0) {
-			enemyHealth.AddjustCurrentHealth (-10);	
+			playHealth.AddjustCurrentHealth (-10);	
 		}
-
+		
 	}
 }
